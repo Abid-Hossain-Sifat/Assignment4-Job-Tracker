@@ -60,4 +60,49 @@ function toggleStyle(id) {
         jobAvailable.innerText = allCardSection.children.length;
     }
     calculateCount();
-}
+};
+
+
+const mainContainer = document.querySelector('main');
+mainContainer.addEventListener('click', function (event) {
+    if (event.target.classList.contains('btn-success') || event.target.classList.contains('btn-error')) {
+        const card = event.target.closest('.relative.bg-white');
+        if (!card) return;
+
+        const companyName = card.querySelector('.text-xl.font-semibold').innerText;
+        const position = card.querySelector('.text-sm.text-gray-500').innerText;
+        const info = card.querySelectorAll('.text-sm.text-gray-600')[0].innerText;
+        const statusElement = card.querySelector('.inline-block');
+        const note = card.querySelector('.leading-6').innerText;
+
+        const cardInfo = { companyName, position, info, note };
+
+        if (event.target.classList.contains('btn-success')) {
+            statusElement.innerText = 'INTERVIEW';
+            statusElement.className = 'inline-block bg-green-50 py-2 px-4 text-sm font-medium text-green-700 rounded-md';
+            if (!interviewList.find(item => item.companyName === companyName)) {
+                interviewList.push(cardInfo);
+            }
+            rejectList = rejectList.filter(item => item.companyName !== companyName);
+        } else if (event.target.classList.contains('btn-error') && !event.target.closest('.text-gray-400')) {
+            statusElement.innerText = 'REJECTED';
+            statusElement.className = 'inline-block bg-red-50 py-2 px-4 text-sm font-medium text-red-700 rounded-md';
+            if (!rejectList.find(item => item.companyName === companyName)) {
+                rejectList.push(cardInfo);
+            }
+            interviewList = interviewList.filter(item => item.companyName !== companyName);
+        }
+        calculateCount();
+        if (currentStatus !== 'all-btn') toggleStyle(currentStatus);
+    }
+
+    if (event.target.closest('.text-gray-400')) {
+        const card = event.target.closest('.relative.bg-white');
+        const companyName = card.querySelector('.text-xl.font-semibold').innerText;
+        interviewList = interviewList.filter(item => item.companyName !== companyName);
+        rejectList = rejectList.filter(item => item.companyName !== companyName);
+        card.remove();
+        calculateCount();
+        toggleStyle(currentStatus);
+    }
+});
