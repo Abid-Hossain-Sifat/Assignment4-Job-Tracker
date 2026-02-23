@@ -30,7 +30,7 @@ parent.appendChild(newDiv);
 **How Event Bubbling Works:**
 **• Start:** When a button (child element) is clicked, the event first triggers the handler on that button.
 
-**• Propagation Upwards:** Then the event moves up to its parent element (like a < div > or < form >), then to <body>, and finally reaches <html> or the document.
+**• Propagation Upwards:** Then the event moves up to its parent element (like a `<div>` or `<form>`), then to <body>, and finally reaches <html> or the document.
 
 **• Default Behavior:** This is the browser’s default behavior, allowing events to be handled by parent elements as well.
 
@@ -64,12 +64,16 @@ document.getElementById("parent").addEventListener("click", function() {
 
 **Example:** 
 ```js
-Clicking a link does not load the page.
+document.querySelector("a").addEventListener("click", function(e) {
+  e.preventDefault(); 
+});
 ```
 
 **stopPropagation()** stops the event from bubbling or capturing. 
 
 **Example:** 
 ```js
-The click listener on the parent element does not get triggered.
+document.querySelector(".child").addEventListener("click", function(e) {
+  e.stopPropagation();
+});
 ```
